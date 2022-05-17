@@ -1,0 +1,3 @@
+# This helps run the cron.php script for Tabby
+
+0 5 * * * php '/config/tabby/cron.php'
