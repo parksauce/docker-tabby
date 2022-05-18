@@ -1,7 +1,7 @@
 FROM ubuntu/apache2:latest
 
 ARG TABBY_VERSION=1.2.2
-ARG PHP_VERSION=7.3
+ARG PHP_VERSION=
 
 RUN \
     echo 'Installing Build Dependencies' && \
