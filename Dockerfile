@@ -39,7 +39,7 @@ COPY rootfs /
 
 RUN \
     echo 'Fix Permissions' && \
-    chmod 777 /defaults/apache2/sites-enabled/tabby.conf && \
+    chmod 755 /defaults/apache2/sites-enabled/tabby.conf && \
     chmod +x /defaults/init.sh
 
 CMD bash /defaults/init.sh
