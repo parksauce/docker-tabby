@@ -6,12 +6,12 @@ ARG PHP_VERSION=
 RUN \
     echo 'Installing Build Dependencies' && \
     apt-get update && apt-get install -y \
+    git \
     apt-utils \
     software-properties-common && \
     LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php -y && \
     echo 'Installing Runtime Packages' && \
     apt-get update && apt-get install -y \
-    git \
     cron \
     php${PHP_VERSION} \
     php${PHP_VERSION}-cli \
@@ -29,6 +29,7 @@ RUN \
     cd tabby && git checkout v${TABBY_VERSION} && \
     echo 'Remove Build Dependencies' && \
     apt-get purge -y \
+    git \
     apt-utils \
     software-properties-common && \
     echo 'Updating Packages' && \
@@ -39,7 +40,7 @@ COPY rootfs /
 
 RUN \
     echo 'Fix Permissions' && \
-    chmod 755 /defaults/apache2/sites-enabled/tabby.conf && \
+    chmod 777 /defaults/apache2/sites-enabled/tabby.conf && \
     chmod +x /defaults/init.sh
 
 CMD bash /defaults/init.sh
