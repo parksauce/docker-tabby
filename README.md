@@ -98,4 +98,4 @@ cd tabby && docker build -t tabby .
 ```
 
 ## License
-This project is licensed under the AGPL license - see the [LICENSE](https://github.com/the-alpaka/docker_tabby/blob/main/LICENSE) file for details.
+This project is licensed under the AGPL license - see the [LICENSE](https://github.com/parksauce/tabby/blob/main/LICENSE) file for details.
