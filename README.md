@@ -12,6 +12,9 @@
 - Optional:
 	- Docker Compose
 
+## Credits
+All credits to Tabby goes to the devs at [https://github.com/bertvandepoel/tabby](https://github.com/bertvandepoel/tabby). 
+
 # Quick Start
 This is the bare minimum you need to get the container up and running. Note: this method still needs a database to function properly.
 ```bash
@@ -93,3 +96,6 @@ This section covers building the container.
 git clone https://github.com/parksauce/tabby.git
 cd tabby && docker build -t tabby .
 ```
+
+## License
+This project is licensed under the AGPL license - see the [LICENSE](https://github.com/the-alpaka/docker_tabby/blob/main/LICENSE) file for details.
