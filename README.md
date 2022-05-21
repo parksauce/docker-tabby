@@ -14,7 +14,7 @@
 - Optional:
 	- Docker Compose
 
-## Credits
+# Credits
 All credits to Tabby goes to the devs at [https://github.com/bertvandepoel/tabby](https://github.com/bertvandepoel/tabby). 
 
 # Quick Start
