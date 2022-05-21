@@ -1,3 +1,5 @@
+# Documentation Also Available at [Park Sauce Docs](https://docs.parksauce.io)
+
 # Goals
 - Rebase the image from ubuntu to alpine to support more architectures
 - Switch to NGINX as the webserver
@@ -19,11 +21,10 @@ All credits to Tabby goes to the devs at [https://github.com/bertvandepoel/tabby
 This is the bare minimum you need to get the container up and running. Note: this method still needs a database to function properly.
 ```bash
 docker run -d \
---name=tabby \
---network=tabby-backend \
--p 8010:80 \
---restart unless-stopped \
-thealpaka/tabby
+  --name=tabby \
+  -p 8010:80 \
+  --restart unless-stopped \
+  parksauce/tabby
 ```
 Now you can access the container from `http://HOST_IP:8010`
 
@@ -33,24 +34,24 @@ This section covers a more in-depth guide on deploying Tabby on your server.
 ## Docker CLI
 First create a network to connect both of the services to.
 ```bash
-docker network create tabby-backend
+docker network create tabby
 ```
 Run the following command to start Tabby
 ```bash
 docker run -d \
---name=tabby \
---network=tabby-backend \
--p 8010:80 \
---restart unless-stopped \
-thealpaka/tabby
+  --name=tabby \
+  --network=tabby \
+  -p 8010:80 \
+  --restart unless-stopped \
+  parksauce/tabby
 ```
 Then run this command to start the database
 ```bash
 docker run -d \
   --name=mariadb \
-  --network=tabby-backend \
-  -e PUID=1000 # Run 'id' in your terminal to get this value \
-  -e PGID=1000 # Run 'id' in your terminal to get this value \
+  --network=tabby \
+  -e PUID=1000 \ # Run 'id' in your terminal to get this value 
+  -e PGID=1000 \ # Run 'id' in your terminal to get this value 
   -e MYSQL_ROOT_PASSWORD=ROOT_ACCESS_PASSWORD \
   -e TZ=America/New_York \
   -e MYSQL_DATABASE=tabby \
@@ -67,12 +68,12 @@ version: '3'
 services:
 
   tabby:
-    image: thealpaka/tabby
+    image: parksauce/tabby
     container_name: tabby
     ports:
       - 8010:80
     restart: unless-stopped
-    
+
   db:
     image: linuxserver/mariadb
     container_name: tabby-db
@@ -87,6 +88,19 @@ services:
     volumes:
       - ./db:/config
     restart: unless-stopped
+
+  #db:
+  #  image: postgres
+  #  container_name: tabby-db
+  #  networks:
+  #    - backend
+  #  environment:
+  #    - POSTGRES_DB=tabby
+  #    - POSTGRES_USER=tabby
+  #    - POSTGRES_PASSWORD=tabby
+  #  volumes:
+  #    - ./db:/var/lib/postgresql/data
+  #  restart: unless-stopped
 ```
 
 # Build
