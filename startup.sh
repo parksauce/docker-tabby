@@ -22,6 +22,16 @@ if [[ -z "$TABBY_PATH" ]]; then
   exit
 fi
 
+if [[ -z "$PUID" ]]; then
+  echo "UID and GID left empty"
+  echo "It's suggested to input these as they help stop permissions errors"
+  echo 'Continuing anyway...'
+elif [[ -z "$PGID" ]]; then
+  echo "GID left empty"
+  echo 'Defaulting to same as UID'
+  PGID=$PUID
+fi
+
 docker network create tabby
 
 docker run -d \
