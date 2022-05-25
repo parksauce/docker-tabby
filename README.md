@@ -18,13 +18,13 @@
 All credits to Tabby goes to the devs at [https://github.com/bertvandepoel/tabby](https://github.com/bertvandepoel/tabby). 
 
 # Quick Start
-This is the bare minimum you need to get the container up and running. Note: this method still needs a database to function properly.
+This is the fastest way to get the service up and running, it will take you through a semi interactive startup to initialize the environment with a database. It will also give you some steps to connect tabby to the database. Use the code below to deploy tabby on your system, for production envrionments I recommend using [docker compose](#docker-compose).
 ```bash
-docker run -d \
-  --name=tabby \
-  -p 8010:80 \
-  --restart unless-stopped \
-  parksauce/tabby
+# Copy the startup script to your computer
+wget https://raw.githubusercontent.com/parksauce/tabby/main/startup.sh
+
+# Run the script and follow the prompts
+./startup.sh
 ```
 Now you can access the container from `http://HOST_IP:8010`
 
@@ -34,24 +34,24 @@ This section covers a more in-depth guide on deploying Tabby on your server.
 ## Docker CLI
 First create a network to connect both of the services to.
 ```bash
-docker network create tabby
+docker network create tabby-backend
 ```
 Run the following command to start Tabby
 ```bash
 docker run -d \
   --name=tabby \
-  --network=tabby \
+  --network=tabby-backend \
   -p 8010:80 \
   --restart unless-stopped \
-  parksauce/tabby
+  thealpaka/tabby
 ```
 Then run this command to start the database
 ```bash
 docker run -d \
   --name=mariadb \
-  --network=tabby \
-  -e PUID=1000 \ # Run 'id' in your terminal to get this value 
-  -e PGID=1000 \ # Run 'id' in your terminal to get this value 
+  --network=tabby-backend \
+  -e PUID=1000 \ # Run 'id' in your terminal to get this value
+  -e PGID=1000 \ # Run 'id' in your terminal to get this value
   -e MYSQL_ROOT_PASSWORD=ROOT_ACCESS_PASSWORD \
   -e TZ=America/New_York \
   -e MYSQL_DATABASE=tabby \
@@ -61,6 +61,9 @@ docker run -d \
   --restart unless-stopped \
   linuxserver/mariadb
 ```
+
+<br/>
+
 ## Docker Compose
 Create a file named `docker-compose.yml` and then run `docker-compose pull && docker-compose up -d`
 ```bash
@@ -68,12 +71,12 @@ version: '3'
 services:
 
   tabby:
-    image: parksauce/tabby
+    image: thealpaka/tabby
     container_name: tabby
     ports:
       - 8010:80
     restart: unless-stopped
-
+    
   db:
     image: linuxserver/mariadb
     container_name: tabby-db
@@ -88,7 +91,7 @@ services:
     volumes:
       - ./db:/config
     restart: unless-stopped
-
+    
   #db:
   #  image: postgres
   #  container_name: tabby-db
@@ -101,15 +104,46 @@ services:
   #  volumes:
   #    - ./db:/var/lib/postgresql/data
   #  restart: unless-stopped
+
 ```
 
 # Build
 This section covers building the container.
 
-```bash 
+<br/>
+
+## Basic Build
+This will clone the repo to your environment, then it will move to the `tabby` directory and build the container and name it tabby. By default the container uses Tabby version 1.2.2 which may become out of date at some point. Look into the [Advanced Build](#advanced-build) to change the version of Tabby while building the container.
+```bash
 git clone https://github.com/parksauce/tabby.git
 cd tabby && docker build -t tabby .
 ```
+
+<br/>
+
+## Advanced Build
+When building the container you are capable of using a few different build parameters to change the version of both Tabby and PHP in the container. You can use the below command as a template for whatever builds you want.
+
+<br/>
+
+### Clone Repo
+First clone the repo and move to the `tabby` directory
+
+```bash
+git clone https://github.com/parksauce/tabby.git && cd tabby 
+```
+
+### Building the Container
+We support a few different build arguments when building the container. Check [build arguments](#build-arguments) for more information. Below is an example to build the container for Tabby version 1.2.2 using the latest version of PHP.
+```bash
+docker build --build-arg TABBY_VERSION=1.2.2 -t tabby .
+```
+#### Build Arguments
+The table below shows the different arguments we support
+|  Argument | Function  |
+|:---------:|:---------:|
+| TABBY_VERSION | Changes the version of Tabby |
+| PHP_VERSION|Change the version of PHP|
 
 ## License
 This project is licensed under the AGPL license - see the [LICENSE](https://github.com/parksauce/tabby/blob/main/LICENSE) file for details.
