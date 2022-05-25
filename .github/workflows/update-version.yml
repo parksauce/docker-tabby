@@ -1,0 +1,38 @@
+name: Update Version
+on:
+  schedule:
+    - cron: '* 0 * * *'
+  workflow_dispatch:
+  repository_dispatch:  
+
+jobs:
+  update-version:
+    name: Update Version
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Get latest release
+      uses: rez0n/actions-github-release@main
+      id: version
+      env:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: 'bertvandepoel/tabby'
+        type: 'latest'
+    
+    - name: Get current version
+      id: current_version
+      run: echo ::set-output name=version::$(curl https://raw.githubusercontent.com/parksauce/tabby/main/params/VERSION)
+
+    - name: Format version
+      id: latest
+      run: "version='${{ steps.version.outputs.release }}' && echo ::set-output name=version::${version/'v'/''} && mkdir params && echo ${version/'v'/''} > params/VERSION"
+      
+    - run: echo ${{ steps.latest.outputs.version }} && echo ${{ steps.current_version.outputs.version }}
+
+    - name: Compare versions
+      if: $((${{ steps.latest.outputs.version }})) > $((${{ steps.current_version.outputs.version }}))
+      uses: test-room-7/action-update-file@v1
+      with:
+          file-path: params/VERSION
+          commit-msg: bot update
+          github-token: ${{ secrets.GITHUB_TOKEN }}
