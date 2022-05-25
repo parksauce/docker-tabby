@@ -5,6 +5,7 @@ on:
     paths:
       - 'params/VERSION'
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   build:
