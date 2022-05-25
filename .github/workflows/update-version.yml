@@ -36,4 +36,7 @@ jobs:
           file-path: params/VERSION
           commit-msg: bot update
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Run Docker Build
+      if: $((${{ steps.latest.outputs.version }})) > $((${{ steps.current_version.outputs.version }}))
       uses: parksauce/tabby/.github/workflows/build.yml@main
