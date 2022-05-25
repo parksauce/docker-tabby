@@ -6,6 +6,8 @@ services:
     container_name: tabby
     ports:
       - 8010:80
+    environment:
+      - TZ=America/New_York
     restart: unless-stopped
 
   db:
