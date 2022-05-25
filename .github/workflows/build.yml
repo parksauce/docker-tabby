@@ -13,10 +13,6 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-      -
-        name: Get Date
-        id: getdate
-        run: echo ::set-output name=date::$(date '+%Y-%m-%d')
       - 
         name: Get Name
         id: getname
@@ -64,20 +60,20 @@ jobs:
           build-args: TABBY_VERSION=${{ steps.getversion.outputs.version }}
       -
         name: Make Manifest
-        run: docker manifest create --amend parksauce/tabby:1.2.2 \
-               parksauce/tabby:amd64-1.2.2 \
-               parksauce/tabby:arm64-1.2.2
+        run: docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:${{ steps.getversion.outputs.version }} \
+               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }} \
+               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
 
-             docker manifest create --amend parksauce/tabby:latest \
-               parksauce/tabby:amd64 \
-               parksauce/tabby:arm64
+             docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest \
+               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64 \
+               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64
       - 
         name: Test
-        run: docker inspect parksauce/tabby:latest
+        run: docker inspect ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest
              docker image ls
       -
         name: Cleanup
         run: |
-            docker manifest rm parksauce/tabby:latest parksauce/tabby:1.2.2
-            docker image rm parksauce/tabby:amd64 parksauce/tabby:arm64 parksauce/tabby:amd64-1.2.2 parksauce/tabby:arm64-1.2.2
+            docker manifest rm ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:${{ steps.getversion.outputs.version }}
+            docker image rm ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64 ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64 ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
             docker image prune -f
