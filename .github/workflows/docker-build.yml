@@ -1,0 +1,49 @@
+name: Build and Push
+
+on:
+  push:
+    paths:
+      - 'params/VERSION'
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Get Container Name
+      id: name
+      run: echo ::set-output name=containerName::$(cat params/NAME)
+
+    - name: Get Version
+      id: version
+      run: echo ::set-output name=version::$(cat params/VERSION)
+    
+    - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: amd64,arm64
+
+    - name: Build and Push Containers
+      run: docker login --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_TOKEN }}
+           docker buildx build --pull --build-arg TABBY_VERSION=${{ steps.version.outputs.version }} --platform amd64 -t ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64 -t ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} --load .
+           docker buildx build --pull --build-arg TABBY_VERSION=${{ steps.version.outputs.version }} --platform arm64 -t ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64 -t ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64-${{ steps.version.outputs.version }} --load .
+
+           docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:latest ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64 ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64
+           docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:${{ steps.version.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64-${{ steps.version.outputs.version }}
+
+           docker push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} 
+           docker push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64-${{ steps.version.outputs.version }}
+           docker manifest push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:${{ steps.version.outputs.version }}
+
+           docker push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64 
+           docker push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64
+           docker manifest push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:latest
+
+           docker manifest rm ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:latest ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:${{ steps.version.outputs.version }}
+           docker image rm ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64 ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64 ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64-${{ steps.version.outputs.version }}
