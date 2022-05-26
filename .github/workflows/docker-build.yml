@@ -40,7 +40,7 @@ jobs:
 
            docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:${{ steps.version.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64-${{ steps.version.outputs.version }}
 
-           docker inspect ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:latest
+           docker manifest inspect ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:latest
 
            docker manifest rm ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:latest ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:${{ steps.version.outputs.version }}
            docker image rm ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64 ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64 ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64-${{ steps.version.outputs.version }}
