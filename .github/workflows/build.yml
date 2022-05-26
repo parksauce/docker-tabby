@@ -61,13 +61,8 @@ jobs:
           build-args: TABBY_VERSION=${{ steps.getversion.outputs.version }}
       -
         name: Make Manifest
-        run: docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:${{ steps.getversion.outputs.version }} \
-               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }} \
-               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
-
-             docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest \
-               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64 \
-               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64
+        run: docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:${{ steps.getversion.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
+             docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64 ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64
       - 
         name: Test
         run: docker inspect ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest
