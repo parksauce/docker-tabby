@@ -24,10 +24,10 @@ jobs:
       run: echo ::set-output name=version::$(cat params/VERSION)
     
     - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-        with:
-          image: tonistiigi/binfmt:latest
-          platforms: amd64,arm64
+      uses: docker/setup-qemu-action@v1
+      with:
+        image: tonistiigi/binfmt:latest
+        platforms: amd64,arm64
 
     - name: Build and Push Containers
       run: docker login --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_TOKEN }}
