@@ -26,7 +26,7 @@ jobs:
         name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKER_USER }}
+          username: parksauce
           password: ${{ secrets.DOCKER_TOKEN }}
       -
         name: Set up QEMU
@@ -46,7 +46,7 @@ jobs:
           platforms: amd64
           push: false
           pull: true
-          tags: ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64, ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }}
+          tags: parksauce/${{ steps.getname.outputs.containerName }}:amd64, parksauce/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }}
           build-args: TABBY_VERSION=${{ steps.getversion.outputs.version }}
       -
         name: Build for arm64
@@ -57,24 +57,24 @@ jobs:
           platforms: arm64
           push: false
           pull: true
-          tags: ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64, ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
+          tags: parksauce/${{ steps.getname.outputs.containerName }}:arm64, parksauce/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
           build-args: TABBY_VERSION=${{ steps.getversion.outputs.version }}
       -
         name: Make Manifest
-        run: docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:${{ steps.getversion.outputs.version }} \
-               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }} \
-               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
+        run: docker manifest create --amend parksauce/${{ steps.getname.outputs.containerName }}:${{ steps.getversion.outputs.version }} \
+               parksauce/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }} \
+               parksauce/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
 
-             docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest \
-               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64 \
-               ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64
+             docker manifest create --amend parksauce/${{ steps.getname.outputs.containerName }}:latest \
+               parksauce/${{ steps.getname.outputs.containerName }}:amd64 \
+               parksauce/${{ steps.getname.outputs.containerName }}:arm64
       - 
         name: Test
-        run: docker inspect ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest
+        run: docker inspect parksauce/${{ steps.getname.outputs.containerName }}:latest
              docker image ls
       -
         name: Cleanup
         run: |
-            docker manifest rm ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:${{ steps.getversion.outputs.version }}
-            docker image rm ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64 ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64 ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
+            docker manifest rm parksauce/${{ steps.getname.outputs.containerName }}:latest parksauce/${{ steps.getname.outputs.containerName }}:${{ steps.getversion.outputs.version }}
+            docker image rm parksauce/${{ steps.getname.outputs.containerName }}:amd64 parksauce/${{ steps.getname.outputs.containerName }}:arm64 parksauce/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }} parksauce/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
             docker image prune -f
