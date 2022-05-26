@@ -30,11 +30,14 @@ jobs:
         platforms: amd64,arm64
 
     - name: Build and Push Containers
-      run: docker login --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_TOKEN }}
+      run: echo ${{ secrets.DOCKER_TOKEN }} | docker login --username ${{ secrets.DOCKER_USER }}  --password-stdin
+
            docker buildx build --pull --build-arg TABBY_VERSION=${{ steps.version.outputs.version }} --platform amd64 -t ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64 -t ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} --load .
+
            docker buildx build --pull --build-arg TABBY_VERSION=${{ steps.version.outputs.version }} --platform arm64 -t ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64 -t ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64-${{ steps.version.outputs.version }} --load .
 
            docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:latest ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64 ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64
+
            docker manifest create --amend ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:${{ steps.version.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64-${{ steps.version.outputs.version }}
 
            docker push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} 
