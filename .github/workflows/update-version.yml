@@ -22,10 +22,14 @@ jobs:
     - name: Get current version
       id: current_version
       run: echo ::set-output name=version::$(curl https://raw.githubusercontent.com/parksauce/tabby/main/params/VERSION)
+    outputs:
+      currentVersion: ${{ steps.current_version.outputs.version }}
 
     - name: Format version
       id: latest
       run: "version='${{ steps.version.outputs.release }}' && echo ::set-output name=version::${version/'v'/''} && mkdir params && echo ${version/'v'/''} > params/VERSION"
+    outputs:
+      latestVersion: ${{ steps.latest.outputs.version }}
       
     - run: echo ${{ steps.latest.outputs.version }} && echo ${{ steps.current_version.outputs.version }}
 
@@ -36,15 +40,15 @@ jobs:
           file-path: params/VERSION
           commit-msg: bot update
           github-token: ${{ secrets.GITHUB_TOKEN }}
-    outputs:
-      currentVersion:${{ steps.current_version.outputs.version }}
-      latestVersion: ${{ steps.latest.outputs.version }}
   
   build:
+    needs: current_version,latest
     name: Build Containers
     runs-on: ubuntu-latest
     steps:
 
+    - run: echo ${{ needs.latest.outputs.latestVersion }} && echo ${{ needs.current_version.outputs.latestVersion }}
+
     - name: Run Docker Build
-      if: $((${{ steps.latest.outputs.version }})) > $((${{ steps.current_version.outputs.version }}))
+      if: $((${{ needs.latest.outputs.latestVersion }})) > $((${{ needs.current_version.outputs.latestVersion }}))
       uses: parksauce/tabby/.github/workflows/build.yml@main
