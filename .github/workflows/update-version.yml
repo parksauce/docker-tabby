@@ -40,15 +40,3 @@ jobs:
           file-path: params/VERSION
           commit-msg: bot update
           github-token: ${{ secrets.GITHUB_TOKEN }}
-  
-  build:
-    needs: current_version,latest
-    name: Build Containers
-    runs-on: ubuntu-latest
-    steps:
-
-    - run: echo ${{ needs.latest.outputs.latestVersion }} && echo ${{ needs.current_version.outputs.latestVersion }}
-
-    - name: Run Docker Build
-      if: $((${{ needs.latest.outputs.latestVersion }})) > $((${{ needs.current_version.outputs.latestVersion }}))
-      uses: parksauce/tabby/.github/workflows/build.yml@main
