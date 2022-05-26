@@ -22,14 +22,10 @@ jobs:
     - name: Get current version
       id: current_version
       run: echo ::set-output name=version::$(curl https://raw.githubusercontent.com/parksauce/tabby/main/params/VERSION)
-    outputs:
-      currentVersion: ${{ steps.current_version.outputs.version }}
 
     - name: Format version
       id: latest
       run: "version='${{ steps.version.outputs.release }}' && echo ::set-output name=version::${version/'v'/''} && mkdir params && echo ${version/'v'/''} > params/VERSION"
-    outputs:
-      latestVersion: ${{ steps.latest.outputs.version }}
       
     - run: echo ${{ steps.latest.outputs.version }} && echo ${{ steps.current_version.outputs.version }}
 
