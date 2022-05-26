@@ -35,4 +35,32 @@ jobs:
       with:
           file-path: params/VERSION
           commit-msg: bot update
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.RJP_PAT_TOKEN }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
