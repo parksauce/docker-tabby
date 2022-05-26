@@ -36,6 +36,14 @@ jobs:
           file-path: params/VERSION
           commit-msg: bot update
           github-token: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      currentVersion:${{ steps.current_version.outputs.version }}
+      latestVersion: ${{ steps.latest.outputs.version }}
+  
+  build:
+    name: Build Containers
+    runs-on: ubuntu-latest
+    steps:
 
     - name: Run Docker Build
       if: $((${{ steps.latest.outputs.version }})) > $((${{ steps.current_version.outputs.version }}))
