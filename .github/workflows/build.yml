@@ -70,13 +70,13 @@ jobs:
       -
         name: Push Containers
         run: |
-           docker push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64-${{ steps.version.outputs.version }} 
-           docker push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64-${{ steps.version.outputs.version }}
-           docker manifest push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:${{ steps.version.outputs.version }}
+           docker push ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64-${{ steps.getversion.outputs.version }} 
+           docker push ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64-${{ steps.getversion.outputs.version }}
+           docker manifest push ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:${{ steps.getversion.outputs.version }}
 
-           docker push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:amd64 
-           docker push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:arm64
-           docker manifest push ${{ secrets.DOCKER_USER }}/${{ steps.name.outputs.containerName }}:latest
+           docker push ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:amd64 
+           docker push ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:arm64
+           docker manifest push ${{ secrets.DOCKER_USER }}/${{ steps.getname.outputs.containerName }}:latest
       -
         name: Cleanup
         run: |
