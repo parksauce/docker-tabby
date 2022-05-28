@@ -2,13 +2,14 @@
 # Start Tabby
 
 # Get Necessary Variables
+read -p "Enter a path to store your configuration files for tabby: " TABBY_PATH
+echo ''
 read -p "Enter a password for the database (leave blank to generate one at random): " DB_PASSWORD
 echo ''
 read -p "Enter you timezone (ex. America/New_York): " TZ
 echo ''
 read -p "Enter your UID and GID separated by a space (run 'id' to get these values): " PUID PGID
 echo ''
-read -p "Enter a path to store your configuration files for tabby: " TABBY_PATH
 
 # Check if DB_PASSWORD is set if not generate a random one
 [[ -z "$DB_PASSWORD" ]] && echo -e '\nDatabase Password not set\nGenerating one at random\n' && DB_PASSWORD=$(echo $RANDOM | md5sum | head -c 25; echo)
@@ -28,10 +29,9 @@ mkdir -p $TABBY_PATH
 echo -e '\nPulling Containers'
 docker pull -q parksauce/tabby
 docker pull -q linuxserver/mariadb
-echo ''
 
-echo 'Starting Tabby'
-docker run -dq \
+echo -e '\nStarting Tabby'
+docker run -d \
   --name=tabby \
   --network=tabby \
   -p 8010:80 \
@@ -39,10 +39,9 @@ docker run -dq \
   -v ${TABBY_PATH}/config:/config \
   --restart unless-stopped \
   parksauce/tabby
-echo ''
 
-echo 'Starting Tabby-DB'
-docker run -dq \
+echo -e '\nStarting Tabby-DB'
+docker run -d \
   --name=tabby-db \
   --network=tabby \
   -e PUID=${PUID} \
