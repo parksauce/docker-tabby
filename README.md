@@ -6,7 +6,7 @@
 - Add PUID and PGID environment variables
 
 # Known Issues
-- Emails not sending - this is because Tabby currently uses sendmail to send emails, however, from my research sendmail isn't robust enough to allow external email server's. Moreover, implementing an email server into this container is simply out of the scope for this project. I am looking around to see if there is anything that can accept sendmail requests and proxy those to an external email server. I am by no means a software developer and my specialties focus more on running and managing containers rather than anything software related. If anyone would like to help out with this project or has any suggestions I am all ears.
+- Emails not sending - this is because Tabby currently uses sendmail to send emails, however, from my research sendmail isn't robust enough to allow authentication to external email server's. Moreover, implementing an email server into this container is simply out of the scope for this project. I am looking around to see if there is anything that can accept sendmail requests and proxy those to an external email server. I am by no means a software developer and my specialties focus more on running and managing containers rather than anything software related. If anyone would like to help out with this project or has any suggestions I am all ears.
 
 # Requirements
 - Docker
