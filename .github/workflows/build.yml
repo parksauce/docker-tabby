@@ -90,6 +90,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get Images for debugging
+        run: | 
+            docker images
+            
       - name: Tag containers for ghcr.io
         run: |
             docker tag ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }} ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }}
@@ -100,11 +104,6 @@ jobs:
             docker tag ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64
             docker tag ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64 ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
 
-            # Tag version manifest with ghcr.io
-            docker tag ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }} ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }}
-            # Tag latest manifest with ghcr.io
-            docker tag ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest
-      
       - name: Push to ghcr.io
         run: |
 
