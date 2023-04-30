@@ -8,6 +8,14 @@ services:
       - 8010:80
     environment:
       - TZ=America/New_York
+      # Mail server configuration
+      - TABBY_SMTP_USER=user@example.com
+      - TABBY_SMTP_PASS=MyPassword
+      - TABBY_SMTP_HOST=mail.example.com
+      - TABBY_SMTP_PORT=465 # Optional | Default: 465 | Typically 465 or 587
+      - TABBY_SMTP_AUTH_METHOD=LOGIN # Optional | Default: LOGIN | LOGIN, PLAIN, CRAM-MD5
+      - TABBY_SMTP_USE_TLS=Yes # Optional | Default: Yes | Yes, No
+      - TABBY_SMTP_USE_STARTTLS=No # Optional | Default: No | Yes, No
     restart: unless-stopped
 
   db:

@@ -1,12 +1,7 @@
-# Documentation Also Available at [Park Sauce Docs](https://docs.parksauce.io)
-
 # Goals
 - Rebase the image from ubuntu to alpine to support more architectures
 - Switch to NGINX as the webserver
 - Add PUID and PGID environment variables
-
-# Known Issues
-- Emails not sending
 
 # Requirements
 - Docker
@@ -42,8 +37,15 @@ docker run -d \
   --name=tabby \
   --network=tabby-backend \
   -p 8010:80 \
+  -e TABBY_SMTP_USER=user@example.com \
+  -e TABBY_SMTP_PASS=MyPassword \
+  -e TABBY_SMTP_HOST=mail.example.com \
+  -e TABBY_SMTP_PORT=465 \
+  -e TABBY_SMTP_AUTH_METHOD=LOGIN \ 
+  -e TABBY_SMTP_USE_TLS=Yes \ 
+  -e TABBY_SMTP_USE_STARTTLS=No \ 
   --restart unless-stopped \
-  thealpaka/tabby
+  parksauce/tabby
 ```
 Then run this command to start the database
 ```bash
@@ -71,10 +73,20 @@ version: '3'
 services:
 
   tabby:
-    image: thealpaka/tabby
+    image: parksauce/tabby
     container_name: tabby
     ports:
       - 8010:80
+    environment:
+      - TZ=America/New_York
+      # Mail server configuration
+      - TABBY_SMTP_USER=user@example.com
+      - TABBY_SMTP_PASS=MyPassword
+      - TABBY_SMTP_HOST=mail.example.com
+      - TABBY_SMTP_PORT=465 # Optional | Default: 465 | Typically 465 or 587
+      - TABBY_SMTP_AUTH_METHOD=LOGIN # Optional | Default: LOGIN | LOGIN, PLAIN, CRAM-MD5
+      - TABBY_SMTP_USE_TLS=Yes # Optional | Default: Yes | Yes, No
+      - TABBY_SMTP_USE_STARTTLS=No # Optional | Default: No | Yes, No
     restart: unless-stopped
     
   db:
@@ -104,8 +116,18 @@ services:
   #  volumes:
   #    - ./db:/var/lib/postgresql/data
   #  restart: unless-stopped
-
 ```
+Environment Variables
+|  Variable | Description | Default | Optional |
+|:---------:|:-----------:|:-------:|:--------:|
+| TZ | Set this to your timezone. Example: America/New_York |  | [x] |
+| TABBY_SMTP_HOST | Set this to your mail server host. Example: mail.example.com |  |  |
+| TABBY_SMTP_PORT | Set this to the port of your mail server. This will typically be 465 or 587 | 465 | [x] |
+| TABBY_SMTP_USER | Set this to your SMTP user, this is used to authenticate with your SMTP server. Example: user@example.com |  |  |
+| TABBY_SMTP_PASS | Set this to your SMTP users password, this is used to authenticate with your SMTP server. Example: MyPassword |  |  | 
+| TABBY_SMTP_AUTH_METHOD | Set this to the authentication method you use for your SMTP server. Some options are PLAIN, LOGIN, and CRAM-MD5, theres more but those ones have logic built in so you can input plain text and it will create the hash for you. The rest you will need to manually create the hash for. | LOGIN | [x] |
+| TABBY_SMTP_USE_TLS | Set this to Yes to use TLS otherwise you can set it to No. | Yes | [x] |
+| TABBY_SMTP_USE_STARTTLS | Set this to Yes or No to use STARTTLS | No | [x] |  
 
 # Build
 This section covers building the container.
