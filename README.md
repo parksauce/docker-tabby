@@ -148,10 +148,10 @@ services:
   #  restart: unless-stopped
 ```
 
+<br/>
+
 ## Build
 This section covers building the container.
-
-<br/>
 
 ### Basic Build
 This will clone the repo to your environment, then it will move to the `tabby` directory and build the container and name it tabby. By default the container uses Tabby version 1.2.2 which may become out of date at some point. Look into the [Advanced Build](#advanced-build) to change the version of Tabby while building the container.
@@ -160,12 +160,8 @@ git clone https://github.com/parksauce/tabby.git
 cd tabby && docker build -t tabby .
 ```
 
-<br/>
-
 ### Advanced Build
 When building the container you are capable of using a few different build parameters to change the version of both Tabby and PHP in the container. You can use the below command as a template for whatever builds you want.
-
-<br/>
 
 #### Clone Repo
 First clone the repo and move to the `tabby` directory
