@@ -55,20 +55,17 @@ jobs:
           tags: ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64, ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }}, ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64, ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }}
           build-args: TABBY_VERSION=${{ steps.getvariables.outputs.version }}
       
-      #- name: Build for arm64
-      #  uses: docker/build-push-action@v2
-      #  with:
-      #    context: .
-      #    file: ./Dockerfile
-      #    platforms: arm64
-      #    push: false
-      #    pull: true
-      #    load: true
-      #    tags: ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64, ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}, ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64, ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
-      #    build-args: TABBY_VERSION=${{ steps.getvariables.outputs.version }}
-      
-      - name: Get Images for debugging
-        run: docker images
+      - name: Build for arm64
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: arm64
+          push: false
+          pull: true
+          load: true
+          tags: ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64, ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}, ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64, ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
+          build-args: TABBY_VERSION=${{ steps.getvariables.outputs.version }}
 
       - name: Make Manifests
         run: |
@@ -76,72 +73,51 @@ jobs:
             # Make version manifest
             docker manifest create --amend \
             ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }} \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} 
-            #${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
 
             # Make latest manifest
             docker manifest create --amend \
             ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 
-            #${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
 
             # Make version manifest for ghcr.io
             docker manifest create --amend \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }} \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} 
-            #ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
 
             # Make latest manifest for ghcr.io
             docker manifest create --amend \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 
-            #ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
-
-      - name: Get Images for debugging
-        run: docker images
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
 
       - name: Push to docker.io
         run: |
 
             # Push version containers to docker.io
             docker push ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} 
-            #docker push ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
+            docker push ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
             docker manifest push ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }}
 
             # Push latest containers to docker.io
             docker push ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 
-            #docker push ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
+            docker push ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
             docker manifest push ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest
-
-      - name: Get Images for debugging
-        run: docker images
-
-      #- name: Make ghcr.io manifests
-      #  run: |
-
-            # Make version manifest
-      #      docker manifest create --amend \
-      #      ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }} \
-      #      ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
-      #      #ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
-
-            # Make latest manifest
-      #      docker manifest create --amend \
-      #      ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest \
-      #      ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
-      #      #ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
 
       - name: Push to ghcr.io
         run: |
 
             # Push version containers to ghcr.io
             docker push ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} 
-            #docker push ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
-            docker manifest push ghcr.io${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }}
+            docker push ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
+            docker manifest push ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }}
 
             # Push latest containers to ghcr.io
             docker push ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 
-            #docker push ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
+            docker push ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
             docker manifest push ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest
       
       - name: Cleanup
@@ -157,12 +133,12 @@ jobs:
             # Remove containers
             docker image rm \
             ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
-            #${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64 \
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64 \
             ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
-            #${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }} \
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }} \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
-            #ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64 \
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64 \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
-            #ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
 
             docker image prune -af
