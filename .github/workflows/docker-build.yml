@@ -1,11 +1,11 @@
-name: Build and Push 2
+name: Build and Push 2.0 | WIP
 
 on:
   #push:
   #  paths:
   #    - 'params/VERSION'
   workflow_dispatch:
-  workflow_call:
+  #workflow_call:
 
 jobs:
   build:
