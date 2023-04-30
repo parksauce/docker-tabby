@@ -69,27 +69,27 @@ jobs:
             # Make version manifest
             docker manifest create --amend \
             ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }} \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} 
             #${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
 
             # Make latest manifest
             docker manifest create --amend \
             ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
+            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 
             #${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
 
             # Make version manifest for ghcr.io
             docker manifest create --amend \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }} \
-            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} 
             #ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
 
             # Make latest manifest for ghcr.io
             docker manifest create --amend \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest \
-            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 
             #ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
-            
+
       - name: Get Images for debugging
         run: docker images
 
