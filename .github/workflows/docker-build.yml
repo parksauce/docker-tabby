@@ -1,9 +1,9 @@
-name: Build and Push 2
+name: Build and Push
 
 on:
-  #push:
-  #  paths:
-  #    - 'params/VERSION'
+  push:
+    paths:
+      - 'params/VERSION'
   workflow_dispatch:
   workflow_call:
 
