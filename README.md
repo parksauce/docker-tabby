@@ -117,17 +117,18 @@ services:
   #    - ./db:/var/lib/postgresql/data
   #  restart: unless-stopped
 ```
-Environment Variables
+
+## Environment Variables
 |  Variable | Description | Default | Optional |
 |:---------:|:-----------:|:-------:|:--------:|
-| TZ | Set this to your timezone. Example: America/New_York |  | [x] |
-| TABBY_SMTP_HOST | Set this to your mail server host. Example: mail.example.com |  |  |
-| TABBY_SMTP_PORT | Set this to the port of your mail server. This will typically be 465 or 587 | 465 | [x] |
-| TABBY_SMTP_USER | Set this to your SMTP user, this is used to authenticate with your SMTP server. Example: user@example.com |  |  |
-| TABBY_SMTP_PASS | Set this to your SMTP users password, this is used to authenticate with your SMTP server. Example: MyPassword |  |  | 
-| TABBY_SMTP_AUTH_METHOD | Set this to the authentication method you use for your SMTP server. Some options are PLAIN, LOGIN, and CRAM-MD5, theres more but those ones have logic built in so you can input plain text and it will create the hash for you. The rest you will need to manually create the hash for. | LOGIN | [x] |
-| TABBY_SMTP_USE_TLS | Set this to Yes to use TLS otherwise you can set it to No. | Yes | [x] |
-| TABBY_SMTP_USE_STARTTLS | Set this to Yes or No to use STARTTLS | No | [x] |  
+| `TZ` | Set this to your timezone. <br/>Example: `America/New_York` | `UTC` | &#x2713; |
+| `TABBY_SMTP_HOST` | Set this to your mail server host. <br/>Example: `mail.example.com` |  |  |
+| `TABBY_SMTP_PORT` | Set this to the port of your mail server. This will typically be `465` or `587 `| `465` | &#x2713; |
+| `TABBY_SMTP_USER` | Set this to your SMTP user, this is used to authenticate with your SMTP server. <br/>Example: `user@example.com` |  |  |
+| `TABBY_SMTP_PASS` | Set this to your SMTP users password, this is used to authenticate with your SMTP server. <br/>Example: `MyPassword` |  |  | 
+| `TABBY_SMTP_AUTH_METHOD` | Set this to the authentication method you use for your SMTP server. Some options are `PLAIN`, `LOGIN`, and `CRAM-MD5`, theres more but those ones have logic built in so you can input plain text and it will create the hash for you. The rest you will need to manually create the hash for. | `LOGIN` | &#x2713; |
+| `TABBY_SMTP_USE_TLS` | Set this to `Yes` to use TLS otherwise you can set it to `No`. | `Yes` | &#x2713; |
+| `TABBY_SMTP_USE_STARTTLS` | Set this to `Yes` or `No` to use STARTTLS | `No` | &#x2713; |  
 
 # Build
 This section covers building the container.
