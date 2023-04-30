@@ -123,7 +123,7 @@ services:
 |:---------:|:-----------:|:-------:|:--------:|
 | `TZ` | Set this to your timezone. <br/>Example: `America/New_York` | `UTC` | &#x2713; |
 | `TABBY_SMTP_HOST` | Set this to your mail server host. <br/>Example: `mail.example.com` |  |  |
-| `TABBY_SMTP_PORT` | Set this to the port of your mail server. This will typically be `465` or `587 `| `465` | &#x2713; |
+| `TABBY_SMTP_PORT` | Set this to the port of your mail server. This will typically be `465` or `587`| `465` | &#x2713; |
 | `TABBY_SMTP_USER` | Set this to your SMTP user, this is used to authenticate with your SMTP server. <br/>Example: `user@example.com` |  |  |
 | `TABBY_SMTP_PASS` | Set this to your SMTP users password, this is used to authenticate with your SMTP server. <br/>Example: `MyPassword` |  |  | 
 | `TABBY_SMTP_AUTH_METHOD` | Set this to the authentication method you use for your SMTP server. Some options are `PLAIN`, `LOGIN`, and `CRAM-MD5`, theres more but those ones have logic built in so you can input plain text and it will create the hash for you. The rest you will need to manually create the hash for. | `LOGIN` | &#x2713; |
@@ -168,5 +168,5 @@ The table below shows the different arguments we support
 | TABBY_VERSION | Changes the version of Tabby |
 | PHP_VERSION|Change the version of PHP|
 
-## License
+# License
 This project is licensed under the AGPL license - see the [LICENSE](https://github.com/parksauce/tabby/blob/main/LICENSE) file for details.
