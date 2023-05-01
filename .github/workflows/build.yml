@@ -91,7 +91,7 @@ jobs:
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
 
-            # Make latest manifest for ghcr.io
+            # Make version manifest for ghcr.io
             docker manifest create --amend \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
