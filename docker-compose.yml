@@ -16,6 +16,8 @@ services:
       - TABBY_SMTP_AUTH_METHOD=LOGIN # Optional | Default: LOGIN | LOGIN, PLAIN, CRAM-MD5
       - TABBY_SMTP_USE_TLS=Yes # Optional | Default: Yes | Yes, No
       - TABBY_SMTP_USE_STARTTLS=No # Optional | Default: No | Yes, No
+    volumes:
+      - ./tabby:/config
     restart: unless-stopped
 
   db:

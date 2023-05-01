@@ -74,6 +74,7 @@ docker run -d \
   -e TABBY_SMTP_AUTH_METHOD=LOGIN \ 
   -e TABBY_SMTP_USE_TLS=Yes \ 
   -e TABBY_SMTP_USE_STARTTLS=No \ 
+  -v path_to_data:/config \
   --restart unless-stopped \
   parksauce/tabby
 ```
@@ -117,6 +118,8 @@ services:
       - TABBY_SMTP_AUTH_METHOD=LOGIN # Optional | Default: LOGIN | LOGIN, PLAIN, CRAM-MD5
       - TABBY_SMTP_USE_TLS=Yes # Optional | Default: Yes | Yes, No
       - TABBY_SMTP_USE_STARTTLS=No # Optional | Default: No | Yes, No
+    volumes:
+      - ./tabby:/config
     restart: unless-stopped
     
   db:
