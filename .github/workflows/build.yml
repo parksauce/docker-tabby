@@ -66,6 +66,9 @@ jobs:
           load: true
           tags: ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64, ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}, ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64, ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
           build-args: TABBY_VERSION=${{ steps.getvariables.outputs.version }}
+     
+     - name: List Images
+       run: docker images
 
       - name: Make Manifests
         run: |
@@ -85,14 +88,14 @@ jobs:
             # Make version manifest for ghcr.io
             docker manifest create --amend \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:${{ steps.getvariables.outputs.version }} \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64-${{ steps.getvariables.outputs.version }} \
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64-${{ steps.getvariables.outputs.version }}
 
             # Make latest manifest for ghcr.io
             docker manifest create --amend \
             ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:latest \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
-            ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 \
+            ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
 
       - name: Push to docker.io
         run: |
