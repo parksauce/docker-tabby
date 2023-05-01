@@ -95,7 +95,7 @@ jobs:
             docker rmi ghcr.io/parksauce/tabby:arm64
             # Not sure whats wrong here; I've double checked and the image exists the names are right but I am getting a manifest unknown error. I event tried copying and pasting the command above and only making the necessary changes. Now I'll try tagging the images manually before creating the manifest.
             docker tag ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64 ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:amd64
-            docker tag ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
+            docker tag ${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64 ghcr.io/${{ secrets.DOCKER_USER }}/${{ steps.getvariables.outputs.containerName }}:arm64
 
             # Make version manifest for ghcr.io
             docker manifest create --amend \
