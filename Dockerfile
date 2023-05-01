@@ -29,7 +29,6 @@ RUN \
     libapache2-mod-php${PHP_VERSION} \
     php${PHP_VERSION}-mysql \
     php${PHP_VERSION}-pgsql \
-    base64 \
     openssl \
     xxd 
 
