@@ -68,7 +68,7 @@ jobs:
           build-args: TABBY_VERSION=${{ steps.getvariables.outputs.version }}
      
       - name: List Images
-        run: docker images
+        run: docker images; sleep 20
 
       - name: Make Manifests
         run: |
