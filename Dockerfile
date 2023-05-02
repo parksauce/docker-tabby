@@ -28,9 +28,7 @@ RUN \
     php${PHP_VERSION}-cli \
     libapache2-mod-php${PHP_VERSION} \
     php${PHP_VERSION}-mysql \
-    php${PHP_VERSION}-pgsql \
-    openssl \
-    xxd 
+    php${PHP_VERSION}-pgsql
 
 RUN \
     echo 'Prepare Environment' && \
