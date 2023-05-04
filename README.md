@@ -33,8 +33,8 @@ All credits to Tabby goes to the devs at [https://github.com/bertvandepoel/tabby
 ## Quick Start
 This is the fastest way to get the service up and running, it will take you through a semi interactive startup to initialize the environment with a database. It will also give you some steps to connect tabby to the database. Use the code below to deploy tabby on your system, for production envrionments I recommend using [docker compose](#docker-compose).
 ```bash
-# Copy the startup script to your computer
-wget https://raw.githubusercontent.com/parksauce/tabby/main/startup.sh
+# Copy the startup script to your computer and make executable
+wget https://raw.githubusercontent.com/parksauce/tabby/main/startup.sh && chmod +x startup.sh
 
 # Run the script and follow the prompts
 ./startup.sh
@@ -67,6 +67,7 @@ docker run -d \
   --name=tabby \
   --network=tabby-backend \
   -p 8010:80 \
+  -e TZ=America/New_York \
   -e TABBY_SMTP_USER=user@example.com \
   -e TABBY_SMTP_PASS=MyPassword \
   -e TABBY_SMTP_HOST=mail.example.com \
