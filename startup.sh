@@ -1,6 +1,7 @@
 #!/bin/bash
 # Start Tabby
 
+clear
 # Get Variables
 read -ep "Enter a path to store your configuration files for tabby: " TABBY_PATH
 echo ''
@@ -13,6 +14,7 @@ read -ep "Enter you timezone (optional, ex. America/New_York): " TZ
 echo ''
 read -ep "Enter a version for Tabby (if none is set latest will be used): " VERSION
 
+clear
 # Get Mail server variables
 echo -e '\n\n'
 echo -e '\nMoving on to mail server configuration'
@@ -46,10 +48,14 @@ if [[ -z $PUID ]]; then echo -e "\nUID and GID left empty\nIt's suggested to inp
 
 # Check if TABBY_SMTP_PORT is set; if not set default
 [[ -z $TABBY_SMTP_PORT ]] && TABBY_SMTP_PORT=465
+# Check if TABBY_SMTP_AUTH_METHOD is set; if not set default
+[[ -z $TABBY_SMTP_AUTH_METHOD ]] && TABBY_SMTP_AUTH_METHOD=LOGIN
 # Check if TABBY_SMTP_USE_TLS is set; if not set default
 [[ -z $TABBY_SMTP_USE_TLS ]] && TABBY_SMTP_USE_TLS=Yes
 # Check if TABBY_SMTP_USE_STARTTLS is set; if not set default
 [[ -z $TABBY_SMTP_USE_STARTTLS ]] && TABBY_SMTP_USE_STARTTLS=No
+
+echo ''
 
 # Create network for tabby, this is necessary if you don't want to expose the database port
 # This may error if the network is already created but it doesn't cause any issues with the script
